@@ -13,7 +13,7 @@ import kotlinx.coroutines.Dispatchers
 @HiltViewModel
 class BooksViewModel @Inject constructor(private val repo: BooksRepo) : ViewModel() {
 
-    // Usamos los estados de carga
+    // Usamos los estados de carga al consumir los datos
     fun fetchBooks() = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
         emit(Resource.Loading())
         try {

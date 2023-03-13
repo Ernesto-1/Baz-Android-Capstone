@@ -6,6 +6,7 @@ import com.example.wizelineandroid.data.remote.model.OrderBook
 import retrofit2.http.GET
 import retrofit2.http.Query
 
+//Servicios a consumir
 interface WebService {
 
     @GET("available_books/")

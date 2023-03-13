@@ -19,7 +19,7 @@ import com.example.wizelineandroid.ui.adapter.home.HomeAdapter
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
-
+//Home principal de la aplicacion
 @AndroidEntryPoint
 class HomeFragment : Fragment(com.example.wizelineandroid.R.layout.fragment_home) {
 
@@ -34,13 +34,14 @@ class HomeFragment : Fragment(com.example.wizelineandroid.R.layout.fragment_home
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentHomeBinding.bind(view)
         val mySnackbar = Snackbar.make(view, "No hay conexion a internet", Snackbar.LENGTH_LONG)
-        var mainActivity = MainActivity()
+        val mainActivity = MainActivity()
         if (context?.let { mainActivity.isInternetAvailable(it) } == false){
             mySnackbar.show()
         }
 
         configAdapter()
 
+        //Uso de datos remotos "API" utilizando los estados de carga
         viewModel.fetchBooks().observe(
             viewLifecycleOwner,
             Observer { result ->
@@ -57,14 +58,18 @@ class HomeFragment : Fragment(com.example.wizelineandroid.R.layout.fragment_home
                                 minimum_price = currency.minimum_price
                             )
                         }
+                        //Mandamos datos al adaptador
                         adapterAvBooks.submitList(entities)
                         binding.shimmerViewContainer.visibility = View.GONE
+
+                        //agregar datos de las monedas a la base de datos
                         addNewItem(result.data.payload)
                     }
                     is Resource.Failure -> {
                         binding.shimmerViewContainer.stopShimmer()
                         binding.shimmerViewContainer.visibility = View.GONE
 
+                        //Se usan datos locales "Room"
                         viewModelRoom.getBooks().observe(
                             viewLifecycleOwner,
                             Observer { room ->
@@ -80,6 +85,7 @@ class HomeFragment : Fragment(com.example.wizelineandroid.R.layout.fragment_home
         )
     }
 
+
     private fun isEntryValid(list: List<ModelBook>): Boolean {
         return viewModelRoom.isEntryValid(list.toString())
     }
@@ -87,6 +93,8 @@ class HomeFragment : Fragment(com.example.wizelineandroid.R.layout.fragment_home
     private fun addNewItem(list: List<ModelBook>) {
         if (isEntryValid(list)) viewModelRoom.addNewItem(list)
     }
+
+    //Asignacion de Recycler y navegacion
     private fun configAdapter() {
         mRecyclerView = binding.rvCoins
         adapterAvBooks = HomeAdapter {

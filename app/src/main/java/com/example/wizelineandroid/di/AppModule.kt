@@ -34,6 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 import javax.inject.Singleton
 
+//Se proveen los repositorios, datos locales y remotos para hilt
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AppModule {

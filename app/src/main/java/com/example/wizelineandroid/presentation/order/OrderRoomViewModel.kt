@@ -19,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderRoomViewModel @Inject constructor(private val orderDao: OrderRoomRepo) : ViewModel() {
 
+    //Obtenemos los datos de Room utilizando los recursos de estado de acuerdo al identificador de la moneda
     fun getAsk(id: String) = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
         emit(Resource.Loading())
         try {
@@ -28,6 +29,7 @@ class OrderRoomViewModel @Inject constructor(private val orderDao: OrderRoomRepo
         }
     }
 
+    //Obtenemos los datos de Room utilizando los recursos de estado de acuerdo al identificador de la moneda
     fun getBids(id: String) = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
         emit(Resource.Loading())
         try {
@@ -37,10 +39,12 @@ class OrderRoomViewModel @Inject constructor(private val orderDao: OrderRoomRepo
         }
     }
 
+    //Insertamos la lista de ask
     private fun insertAsk(orderEntity: List<AskEntity>) {
         viewModelScope.launch { orderDao.insertAsk(orderEntity) }
     }
 
+    //Insertamos la lista de Binds
     private fun insertBids(orderEntity: List<BidsEntity>) {
         viewModelScope.launch { orderDao.insertBids(orderEntity) }
     }

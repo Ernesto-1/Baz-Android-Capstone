@@ -11,8 +11,10 @@ import com.example.wizelineandroid.R
 import com.example.wizelineandroid.data.local.entitys.AskEntity
 import com.example.wizelineandroid.databinding.ItemOrderBooksBinding
 
+//Adaptador lista de ask en el detalle de moneda
 class AskAdapter : ListAdapter<AskEntity, AskAdapter.ViewHolder>(DiffUtilCallback) {
 
+    //seteo de datos en pantalla
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemOrderBooksBinding.bind(view)
 
