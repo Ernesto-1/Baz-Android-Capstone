@@ -16,6 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BookRoomViewModel @Inject constructor(private val bookDao: BookRoomRepo) : ViewModel() {
 
+    //Obtenemos los datos de Room utilizando los recursos de estado
     fun getBooks() = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
         emit(Resource.Loading())
         try {
@@ -25,6 +26,7 @@ class BookRoomViewModel @Inject constructor(private val bookDao: BookRoomRepo) :
         }
     }
 
+    //Insertamos la lista de monedas a la base de datos
     private fun insertItem(bookEntity: List<BookEntity>) {
         viewModelScope.launch { bookDao.insertBooks(bookEntity) }
     }

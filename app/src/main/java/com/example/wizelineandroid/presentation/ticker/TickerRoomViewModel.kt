@@ -17,6 +17,7 @@ class TickerRoomViewModel @Inject constructor(private val tickerRoom: TickerRoom
     private val _detail_books = MutableLiveData<TickerEntity>()
     val detailBooks = _detail_books
 
+    //Obtenemos los datos de Room utilizando los recursos de estado de acuerdo al identificador de la moneda
     fun allTicker(id: String) = liveData(viewModelScope.coroutineContext + Dispatchers.Main) {
         emit(Resource.Loading())
         try {
@@ -27,6 +28,7 @@ class TickerRoomViewModel @Inject constructor(private val tickerRoom: TickerRoom
         }
     }
 
+    //Insertamos en la base de datos de Room los datos de aceurdo a la moneda
     private fun insertItemTicker(tickerEntity: TickerEntity) {
         viewModelScope.launch { tickerRoom.insertTicket(tickerEntity) }
     }

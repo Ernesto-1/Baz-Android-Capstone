@@ -28,6 +28,8 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+//Create by Ernesto Lombardini Eliseo - 24/02/2023
+//Detalle de moneda
 @AndroidEntryPoint
 class DetailsFragment : Fragment(R.layout.fragment_details) {
     private val args by navArgs<DetailsFragmentArgs>()
@@ -57,6 +59,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         val df: DateFormat = SimpleDateFormat("'Ultima actualizacion:' dd 'de' MMMM 'del' yyyy 'a las' HH:mm:ss")
         val salida: String = df.format(fecha)
 
+        //Utilizacion de datos Remotos "API" ticker
         viewModel.fetchTickersBooks(args.book).observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Resource.Loading -> {}
@@ -74,6 +77,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
                 }
                 is Resource.Failure -> {
+                    //Se usan datos locales "Room" ticker
                     viewModelRoomTicker.allTicker(args.book).observe(viewLifecycleOwner) { ticker ->
                         when (ticker) {
                             is Resource.Success -> {
@@ -99,6 +103,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             }
         }
 
+        //Utilizacion de datos Remotos "API"
         viewModelOrder.fetchOrder(args.book).observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Resource.Loading -> {}
@@ -124,13 +129,14 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
                     addNewItemBids(result.data.payload.bids)
                 }
                 is Resource.Failure -> {
+                    //Se usan datos locales "Room" lista de Ask
                     viewModelRoomOlder.getAsk(args.book).observe(viewLifecycleOwner) { ask ->
                         when (ask) {
                             is Resource.Success -> adapterAvBooks.submitList(ask.data)
                             else -> {}
                         }
                     }
-
+                    //Se usan datos locales "Room" lista de Binds
                     viewModelRoomOlder.getBids(args.book).observe(viewLifecycleOwner) { bids ->
                         when (bids) {
                             is Resource.Success -> binding.rvBids.adapter = BidsAdapter(bids.data)
@@ -146,6 +152,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         return viewModelRoomTicker.isEntryValid(ticker.toString())
     }
 
+    //Insertamos a Room los datos de acuerdo a la moneda
     private fun addNewItem(ticker: GetTicker, id: String,fecha: String) {
         if (isEntryValid(ticker)) viewModelRoomTicker.addNewItem(ticker, id, fecha)
     }
@@ -153,13 +160,17 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         return viewModelRoomOlder.isEntryValidAsk(list.toString())
     }
 
+    //Insertamos a Room la lista de acuerdo a la moneda
     private fun addNewItemAsk(list: List<Ask>) {
         if (isEntryValid(list)) viewModelRoomOlder.addNewItemAsk(list)
     }
+
+    //Insertamos a Room la lista de acuerdo a la moneda
     private fun addNewItemBids(list: List<Bids>) {
         if (isEntryValid(list)) viewModelRoomOlder.addNewItemBids(list)
     }
 
+    //Asignacion de Recycler
     private fun configAdapter() {
         mRecyclerView = binding.rvAsk
         adapterAvBooks = AskAdapter()

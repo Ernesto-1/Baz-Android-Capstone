@@ -12,6 +12,8 @@ import com.example.wizelineandroid.ui.home.HomeFragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
+// Create by Ernesto Lombardini Eliseo - 24/02/2023
+
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         isInternetAvailable(this)
     }
-
+//validacion de conexion a internet wifi y datos celulares versiones nuevas y antiguas
     fun isInternetAvailable(context: Context): Boolean {
         var result = false
         val connectivityManager =
